@@ -19,3 +19,6 @@ To download this project using git, run the following command at your terminal:
 ```
 git clone https://github.com/StephenGrider/MLKits.git
 ```
+
+### Lodash Playground is found at:
+stephengrider.github.io/JSPlaygrounds/
