@@ -1,6 +1,5 @@
 const outputs = [];
 // const predictionPoint = 300;
-const k = 15;
 
 function onScoreUpdate(dropPosition, bounciness, size, bucketLabel) {
   // Ran every time a balls drops into a bucket
@@ -9,32 +8,30 @@ function onScoreUpdate(dropPosition, bounciness, size, bucketLabel) {
 }
 
 function runAnalysis() {
-  const testSetSize = 10;
+  const testSetSize = 100;
   const [testSet, trainingSet] = splitDataset(outputs, testSetSize); // 2015 destructuring syntax
-  let numberCorrect = 0;
-  for (let i = 0; i < testSet.length; i++) {
-    const bucket = knn(trainingSet, testSet[i][0]);
-    // console.log(bucket, testSet[i][3]);
-    if (bucket === testSet[i][3]) numberCorrect++;
-  }
-  // console.log('Your point will probably fall into', bucket);
-  console.log("Accuracy: " + numberCorrect / testSetSize);
-
-  
+  _.range(1, 20).forEach(k => {
+    const accuracy = _.chain(testSet)
+      .filter(testPoint => knn(trainingSet, testPoint[0], k) === testPoint[3])
+      .size() // basically length
+      .divide(testSetSize)
+      .value();
+    console.log("For k of " + k + " Accuracy: " + accuracy);
+  });
 }
 
-function knn(data, point) {
-  return _.chain(data)
-    .map(row => [distance(row[0], point), row[3]])
-    .sortBy(row => row[0])
-    .slice(0, k)
-    .countBy(row => row[1])
+function knn(data, point, k) {
+  return _.chain(data) // allows you to chain methods together on an array
+    .map(row => [distance(row[0], point), row[3]]) // distance from dropPosition to the testPoint. Returns [diffdistance]
+    .sortBy(row => row[0]) // sort by [diffdistance]
+    .slice(0, k) // arbitrary take only top 15
+    .countBy(row => row[1]) //
     .toPairs()
     .sortBy(row => row[1])
     .last()
     .first()
     .parseInt()
-    .value();
+    .value(); // stops chain
 }
 
 function distance(pointA, pointB) {

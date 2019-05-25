@@ -21,4 +21,4 @@ git clone https://github.com/StephenGrider/MLKits.git
 ```
 
 ### Lodash Playground is found at:
-stephengrider.github.io/JSPlaygrounds/
+stephengrider.github.io/JSPlaygrounds/ 
